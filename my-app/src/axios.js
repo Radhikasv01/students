@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://localhost:7005/api', // No slash before 'https'
+  baseURL: 'https://student-project-api.vercel.app', // No slash before 'https'
   timeout: 1000,
   headers: {
     'Content-Type': 'application/json',
