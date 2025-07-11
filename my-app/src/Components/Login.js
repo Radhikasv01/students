@@ -18,46 +18,47 @@ const Login = () => {
   };
 
   const handleLogin = async (e) => {
-  e.preventDefault();
-  const { username, password } = form;
+    e.preventDefault();
+    const { username, password } = form;
 
-  const validationErrors = {};
-  if (!username) validationErrors.username = 'Username is required';
-  if (!password) validationErrors.password = 'Password is required';
-  if (Object.keys(validationErrors).length > 0) {
-    setErrors(validationErrors);
-    return;
-  }
-
-  try {
-    const response = await axiosInstance.post('Login/Login', {
-      UserName: username,
-      Password: password,
-    });
-
-    const loginData = response.data?.login;
-    if (loginData?.Token) {
-      axiosInstance.defaults.headers.common['Authorization'] = loginData.Token;
-      localStorage.setItem("USERNAME", loginData.UserName);
-      localStorage.setItem("RoleId", loginData.Role_Id);
-      localStorage.setItem("Id", loginData.Id);
-
-      setSnackbarMessage('Login Successful');
-      setSnackbarSeverity('success');
-      setSnackbarOpen(true);
-
-      setTimeout(() => {
-        navigate('/Navbar');
-      }, 1000);
-    } else {
-      throw new Error('Invalid login');
+    const validationErrors = {};
+    if (!username) validationErrors.username = 'Username is required';
+    if (!password) validationErrors.password = 'Password is required';
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
     }
-  } catch (err) {
-    setSnackbarMessage('Invalid username or password');
-    setSnackbarSeverity('error');
-    setSnackbarOpen(true);
-  }
-};
+
+    try {
+      const response = await axiosInstance.post('Login/Login', {
+        UserName: username,
+        Password: password,
+      });
+
+      const loginData = response.data?.login;
+
+      if (loginData?.Token) {
+        axiosInstance.defaults.headers.common['Authorization'] = loginData.Token;
+        localStorage.setItem('USERNAME', loginData.UserName);
+        localStorage.setItem('RoleId', loginData.Role_Id);
+        localStorage.setItem('Id', loginData.Id);
+
+        setSnackbarMessage('Login Successful');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+
+        setTimeout(() => {
+          navigate('/Navbar');
+        }, 1000);
+      } else {
+        throw new Error('Invalid login');
+      }
+    } catch (err) {
+      setSnackbarMessage('Invalid username or password');
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+    }
+  };
 
   const handleCancel = () => {
     setForm({ username: '', password: '' });
